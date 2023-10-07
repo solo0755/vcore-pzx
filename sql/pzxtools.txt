@@ -1,0 +1,21 @@
+
+--查询掉率表
+select i.name ,i.entry ,b.ChanceOrQuestChance from item_template i join (SELECT item,ChanceOrQuestChance FROM `reference_loot_template` WHERE `entry` IN (350021)) b on b.item=i.entry ;
+
+--按物品名称查看怪物掉率
+select i.name ,i.entry ,b.ChanceOrQuestChance from creature_template i join (SELECT entry,item,ChanceOrQuestChance FROM `creature_loot_template` WHERE `item` IN (SELECT entry FROM `item_template` WHERE `name` = '恶魔布')) b on b.entry=i.entry ORDER BY b.ChanceOrQuestChance DESC;
+
+
+--按当前最大版本查询T2.5套
+SELECT * FROM `item_template` i inner join
+		 (SELECT max(patch) as patch,entry FROM item_template i		where patch <=10		GROUP BY entry) b
+		  on  i.patch=b.patch  and b.entry=i.entry  WHERE i.`set_id` BETWEEN '493' AND '509' AND i.`entry` <= '21391'
+		  
+--改密码
+update account set sha_pass_hash=SHA1(UPPER(CONCAT(username,":","123456"))),sessionkey='',v='',s='' where username='CRYSTALWMAGIC';
+
+--增加光环
+25823:124="聚光",142="在指定位置召唤一道光环，持续$d。"
+25824:124="聚光"
+INSERT INTO `world`.`creature_template_addon` (`entry`, `patch`, `mount`, `bytes1`, `b2_0_sheath`, `b2_1_flags`, `emote`, `moveflags`, `auras`) VALUES ('60009', '0', '0', '0', '0', '0', '0', '0', '25824');
+//增加光环  额外特征
